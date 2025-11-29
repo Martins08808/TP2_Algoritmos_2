@@ -5,8 +5,34 @@ from sklearn.preprocessing import StandardScaler
 
 # Configurações Globais
 N_SAMPLES = 750  # Mínimo exigido é 700
-OUTPUT_DIR = "datasets/synthetic"
+OUTPUT_DIR = "data/synthetic"
 SEED_BASE = 42
+
+def gerar_dataset_teste(nome_arquivo="integration_test.npz"):
+    """
+    Gera um único dataset simples (Blobs) especificamente para testes de integração.
+    Retorna o caminho do arquivo gerado.
+    """
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+        
+    caminho_completo = os.path.join(OUTPUT_DIR, nome_arquivo)
+    
+    # Se já existe, não precisa recriar (economiza tempo no teste)
+    if os.path.exists(caminho_completo):
+        print(f"[TESTE] Dataset já existente encontrado: {caminho_completo}")
+        return caminho_completo
+
+    print(f"[TESTE] Gerando dataset sintético para teste...")
+    # Gera 3 blobs simples para validar K=3
+    X, y = datasets.make_blobs(n_samples=N_SAMPLES, centers=3, random_state=SEED_BASE)
+    
+    # Aplica a mesma normalização dos outros dados
+    X_scaled = StandardScaler().fit_transform(X)
+    
+    np.savez(caminho_completo, X=X_scaled, y=y)
+    print(f"[TESTE] Arquivo salvo em: {caminho_completo}")
+    return caminho_completo
 
 def salvar_dataset(X, y, nome_arquivo):
     """
