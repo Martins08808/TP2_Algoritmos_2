@@ -1,6 +1,5 @@
 import numpy as np
 
-
 # ALGORITMO GULOSO
 
 def cluster_guloso(matriz_dist, k, semente=None):
