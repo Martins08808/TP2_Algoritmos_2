@@ -22,3 +22,9 @@ Recomenda-se o uso de um ambiente virtual para não conflitar com outras instala
    python -m venv venv
    .\venv\Scripts\activate
    ```
+
+2. **Instale a dependências:**
+
+   ```bash
+    pip install -r requirements.txt
+   ```
