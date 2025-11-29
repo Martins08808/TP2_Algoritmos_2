@@ -10,7 +10,7 @@ from sklearn.metrics import silhouette_score, adjusted_rand_score
 from distances import gerar_matriz_distancias
 from algorithms import cluster_guloso, cluster_refinamento
 from metrics import atribuir_labels_clusters, calcular_metricas_validacao
-from data_loader import carregar_dados_sinteticos
+from data_loader import carregar_dados_sinteticos, carregar_dados_german
 
 # =============================================================================
 # CONFIGURAÇÕES
@@ -20,8 +20,12 @@ LARGURAS_REFINAMENTO = [0.01, 0.05, 0.10, 0.15, 0.25]
 
 # --- CONFIGURAÇÃO DE FILTRO ---
 DATA_DIR = "synthetic"
+
+ALEMAO = "SouthGermanCredit_LIMPO.csv"
+
 DATASETS_ALVO = [
-    'sklearn_01_circles_v1.csv',
+    ALEMAO,
+    # 'sklearn_01_circles_v1.csv',
 ]
 
 # =============================================================================
@@ -88,50 +92,69 @@ def executar_ciclo(algoritmo_nome, func_algo, matriz_dist, y_true, k_clusters, p
 # =============================================================================
 
 def main():
-    # 1. Busca TODOS os arquivos
+    # 1. Busca arquivos SINTÉTICOS na pasta padrão
     todos_arquivos = glob.glob(os.path.join(DATA_DIR, "*.csv"))
     todos_arquivos.sort()
     
-    # 2. Aplica o filtro de DATASETS_ALVO
+    # 2. Constrói a lista final de arquivos para processar
     arquivos_para_processar = []
     
+    # --- LÓGICA MISTA (Sintéticos + German) ---
     if len(DATASETS_ALVO) > 0:
-        print(f"=== MODO FILTRADO: Rodando apenas {len(DATASETS_ALVO)} datasets escolhidos ===")
-        for arq in todos_arquivos:
-            nome_base = os.path.basename(arq)
-            if nome_base in DATASETS_ALVO:
-                arquivos_para_processar.append(arq)
-            
-        encontrados = [os.path.basename(x) for x in arquivos_para_processar]
+        print(f"=== MODO FILTRADO: Buscando alvos ===")
+        
         for alvo in DATASETS_ALVO:
-            if alvo not in encontrados:
-                print(f"[AVISO] O dataset '{alvo}' está na lista de alvos mas NÃO foi encontrado na pasta '{DATA_DIR}'.")
+            # SWITCH 1: Se for o German Credit, adicionamos manualmente à lista
+            if 'SouthGerman' in alvo:
+                arquivos_para_processar.append(alvo) # Adiciona apenas o nome ou caminho falso, pois o loader sabe onde buscar
+                print(f"  [+] Alvo Especial detectado: {alvo}")
+                continue
+            
+            # Se for sintético, procura na lista do glob
+            encontrado = False
+            for arq_real in todos_arquivos:
+                if os.path.basename(arq_real) == alvo:
+                    arquivos_para_processar.append(arq_real)
+                    encontrado = True
+                    break
+            if not encontrado:
+                print(f"  [AVISO] Dataset sintético '{alvo}' não encontrado em '{DATA_DIR}'.")
     else:
-        print("=== MODO COMPLETO: Rodando todos os datasets encontrados ===")
+        # Se não houver filtro, processa tudo da pasta synthetic
         arquivos_para_processar = todos_arquivos
 
     if not arquivos_para_processar:
-        print("\n[ERRO] Nenhum arquivo para processar. Verifique a lista DATASETS_ALVO ou a pasta data.")
+        print("\n[ERRO] Nenhum arquivo para processar.")
         return
 
     print(f"Total de arquivos na fila: {len(arquivos_para_processar)}\n")
 
-    # Garante que a pasta de resultados existe antes de começar
     os.makedirs("resultados", exist_ok=True)
 
     for arquivo in arquivos_para_processar:
         nome_dataset = os.path.basename(arquivo)
         print(f"--> Processando: {nome_dataset}")
         
-        # Carregar Dados
+        # =====================================================================
+        # SWITCH DE CARREGAMENTO (AQUI É A MUDANÇA PRINCIPAL)
+        # =====================================================================
         try:
-            X, y_true = carregar_dados_sinteticos(arquivo)
+            if 'SouthGerman' in nome_dataset:
+                # CASO 1: German Credit (Chama a função especial que sobe diretórios)
+                print("    [LOADER] Usando carregador específico para German Credit...")
+                X, y_true = carregar_dados_german()
+            else:
+                # CASO 2: Sintéticos (Carrega do caminho arquivo passado pelo glob)
+                X, y_true = carregar_dados_sinteticos(arquivo)
+            
+            # Define o K automaticamente baseado nas classes reais
             k_dinamico = len(np.unique(y_true))
             print(f"    Shape: {X.shape} | Classes (K): {k_dinamico}")
+            
         except Exception as e:
-            print(f"    [ERRO CRÍTICO] Falha ao carregar {nome_dataset}: {e}")
+            print(f"    [ERRO] Falha ao carregar {nome_dataset}: {e}")
             continue
-
+        
         # Gerar Matrizes
         print("    Gerando matrizes de distância...")
         metricas_map = []
