@@ -37,6 +37,30 @@ def carregar_dados_sinteticos(filepath):
     
     return X, y
 
+def carregar_dados_reais(filepath):
+    # Verificação de segurança simples
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"O arquivo não foi encontrado: {filepath}")
+
+    print(f"   [Data Loader] Carregando dados de: {os.path.basename(filepath)}")
+
+    # Carrega o arquivo usando Pandas
+    df = pd.read_csv(filepath)
+
+    # Número total de colunas
+    n_cols = df.shape[1]
+
+    if n_cols < 2:
+        raise ValueError("O CSV precisa ter pelo menos 2 colunas (features + label).")
+
+    # Features = todas as colunas menos a última
+    X = df.iloc[:, :n_cols - 1].values
+
+    # Target = última coluna
+    y = df.iloc[:, n_cols - 1].values
+
+    return X, y
+
 def carregar_dados_german():
     """
     Lê o CSV do diretório ../data/ (relativo a este script em src/),

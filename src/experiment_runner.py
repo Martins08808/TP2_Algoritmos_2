@@ -9,7 +9,7 @@ from sklearn.metrics import silhouette_score, adjusted_rand_score
 # Imports do Projeto
 from distances import gerar_matriz_distancias
 from algorithms import cluster_guloso, cluster_refinamento
-from data_loader import carregar_dados_sinteticos, carregar_dados_german
+from data_loader import carregar_dados_sinteticos, carregar_dados_german, carregar_dados_reais
 
 # =============================================================================
 # CONFIGURAÇÕES
@@ -18,13 +18,68 @@ N_REPETICOES = 15
 LARGURAS_REFINAMENTO = [0.01, 0.05, 0.10, 0.15, 0.25]
 
 # --- CONFIGURAÇÃO DE FILTRO ---
-DATA_DIR = "synthetic"
+# DATA_DIR = "synthetic"
+
 ALEMAO = "SouthGermanCredit_LIMPO.csv"
 
-DATASETS_ALVO = [
-    ALEMAO,
+DATASETS_SINTETICOS = [
+    'multivar_01_circular_sem_overlap.csv',
+    'multivar_02_eliptico_sem_overlap.csv',
+    'multivar_03_circular_baixa_overlap.csv',
+    'multivar_04_eliptico_baixa_overlap.csv',
+    'multivar_05_circular_media_overlap.csv',
+    'multivar_06_eliptico_media_overlap.csv',
+    'multivar_07_circular_alta_overlap.csv',
+    'multivar_08_eliptico_alta_overlap.csv',
+    'multivar_09_circular_correlacao_positiva.csv',
+    'multivar_10_eliptico_tamanhos_diferentes.csv',
+
     # 'sklearn_01_circles_v1.csv',
+    # 'sklearn_01_circles_v2.csv',
+    # 'sklearn_01_circles_v3.csv',
+    # 'sklearn_01_circles_v4.csv',
+    # 'sklearn_01_circles_v5.csv',
+
+    # 'sklearn_02_moons_v1.csv',
+    # 'sklearn_02_moons_v2.csv',
+    # 'sklearn_02_moons_v3.csv',
+    # 'sklearn_02_moons_v4.csv',
+    # 'sklearn_02_moons_v5.csv',
+
+    # 'sklearn_03_blobs_v1.csv',
+    # 'sklearn_03_blobs_v2.csv',
+    # 'sklearn_03_blobs_v3.csv',
+    # 'sklearn_03_blobs_v4.csv',
+    # 'sklearn_03_blobs_v5.csv',
+
+    # 'sklearn_04_no_structure_v1.csv',
+    # 'sklearn_04_no_structure_v2.csv',
+    # 'sklearn_04_no_structure_v3.csv',
+    # 'sklearn_04_no_structure_v4.csv',
+    # 'sklearn_04_no_structure_v5.csv',
+
+    # 'sklearn_05_aniso_v1.csv',
+    # 'sklearn_05_aniso_v2.csv',
+    # 'sklearn_05_aniso_v3.csv',
+    # 'sklearn_05_aniso_v4.csv',
+    # 'sklearn_05_aniso_v5.csv',
+
+    # 'sklearn_06_varied_v1.csv',
+    # 'sklearn_06_varied_v2.csv',
+    # 'sklearn_06_varied_v3.csv',
+    # 'sklearn_06_varied_v4.csv',
+    # 'sklearn_06_varied_v5.csv',
 ]
+
+
+# DATASETS_ALVO = DATASETS_SINTETICOS
+
+DATA_DIR = "data"
+DATASETS_ALVO = [
+    # 'Iranian Customer Churn_LIMPO.csv',
+    'winequality-red_LIMPO.csv',
+    'winequality-white_LIMPO.csv',
+]    
 
 # =============================================================================
 # FUNÇÕES AUXILIARES
@@ -38,11 +93,7 @@ def atribuir_labels_clusters(matriz_dist, indices_centros):
     Retorna:
         labels_pred: Array (N,) com o índice do cluster (0 a k-1) para cada ponto.
     """
-    # Seleciona apenas as colunas correspondentes aos centros escolhidos
-    # matriz_dist shape: (N, N) -> sub_matriz shape: (N, K)
     sub_matriz = matriz_dist[:, indices_centros]
-    
-    # Para cada linha (ponto), descobre qual coluna (centro) tem a menor distância
     labels_pred = np.argmin(sub_matriz, axis=1)
     
     return labels_pred
@@ -70,60 +121,86 @@ def rodar_kmeans(X, k, y_true):
     
     return {'Raio': raio_max, 'Silhouette': sil, 'ARI': ari, 'Tempo': tempo}
 
+def calcular_raio_real(matriz_dist, centros, labels):
+    """Calcula o raio máximo (makespan) da solução usando a matriz de distâncias correta."""
+    raio_max = 0.0
+    n_pontos = matriz_dist.shape[0]
+    for i in range(n_pontos):
+        centro_do_ponto = centros[labels[i]]
+        dist = matriz_dist[i, centro_do_ponto]
+        if dist > raio_max:
+            raio_max = dist
+    return raio_max
+
+
 def executar_ciclo(algoritmo_nome, func_algo, matriz_dist, y_true, k_clusters, params_extras):
-    """ Roda N repetições para um algoritmo específico calculando métricas diretamente """
+    """ 
+    Roda N repetições para um algoritmo específico calculando métricas diretamente.
+
+    Agora usa:
+        → raio real (calcular_raio_real)
+    em vez do raio retornado pelo algoritmo.
+    """
     resultados = []
     nome_metrica = params_extras.get('metrica_nome', 'N/A')
     largura = params_extras.get('largura', 'N/A')
 
     for i in range(N_REPETICOES):
+
         seed = int(time.time() * 1000) % 10000 + i
         start = time.time()
-        
+
         try:
-            # 1. Execução do Algoritmo (Retorna centros/medoids e raio)
+            # 1. Execução do algoritmo
             if algoritmo_nome == 'GULOSO':
-                centros, raio = func_algo(matriz_dist, k_clusters, semente=seed)
+                centros, _ = func_algo(matriz_dist, k_clusters, semente=seed)
+
             elif algoritmo_nome == 'REFINAMENTO':
                 np.random.seed(seed)
-                centros, raio = func_algo(matriz_dist, k_clusters, razao_parada=params_extras['largura'])
-            
+                centros, _ = func_algo(
+                    matriz_dist, 
+                    k_clusters, 
+                    razao_parada=params_extras['largura']
+                )
+
             tempo = time.time() - start
-            
-            # 2. Atribuição de Labels (Necessário para calcular ARI e Silhouette)
+
+            # 2. Atribuir rótulos
             labels = atribuir_labels_clusters(matriz_dist, centros)
+
+            # 3. Calcular métricas
             
-            # 3. Cálculo das Métricas (ADAPTAÇÃO SOLICITADA)
-            
-            # Adjusted Rand Index
+            # ---- Raio real (CORRIGIDO) ----
+            raio_real = calcular_raio_real(matriz_dist, centros, labels)
+
+            # Ajusted Rand Index
             ari = adjusted_rand_score(y_true, labels)
-            
-            # Silhouette Score
-            # Usamos metric='precomputed' porque passamos a matriz de distancias já calculada.
-            # Isso garante que a silhueta seja calculada baseada na métrica correta (Manhattan, Mahalanobis, etc.)
+
+            # Silhouette
             try:
                 if len(np.unique(labels)) > 1:
                     sil = silhouette_score(matriz_dist, labels, metric='precomputed')
                 else:
-                    sil = -1.0 # Silhueta não definida para 1 único cluster
-            except Exception as e:
-                print(f"      [AVISO] Erro Silhouette {algoritmo_nome}: {e}")
+                    sil = -1.0
+            except:
                 sil = -1.0
-            
+
             resultados.append({
                 'Algoritmo': algoritmo_nome,
                 'Metrica_Dist': nome_metrica,
                 'Parametro_Largura': largura,
                 'Repeticao': i + 1,
-                'Raio': raio,
+                'Raio': raio_real,             # <--- AGORA O RAIO REAL
                 'Silhouette': sil,
                 'ARI': ari,
                 'Tempo': tempo
             })
+
         except Exception as e:
-            print(f"      [ERRO] Falha na repetição {i}: {e}")
+            print(f"[ERRO] Falha na repetição {i}: {e}")
 
     return resultados
+
 
 # =============================================================================
 # MAIN LOOP
@@ -178,7 +255,8 @@ def main():
                 print("    [LOADER] Usando carregador específico para German Credit...")
                 X, y_true = carregar_dados_german()
             else:
-                X, y_true = carregar_dados_sinteticos(arquivo)
+                # X, y_true = carregar_dados_sinteticos(arquivo)
+                X, y_true = carregar_dados_reais(arquivo)
             
             k_dinamico = len(np.unique(y_true))
             print(f"    Shape: {X.shape} | Classes (K): {k_dinamico}")
