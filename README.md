@@ -118,6 +118,8 @@ python3 src/data_generator.py
 
 Para rodar a bateria de testes nos datasets (reais e sintéticos), utilize o comando abaixo. As métricas serão exportadas para o diretório resultados/.
 
+Utilize as variáveis globais no topo do arquivo para selecionar quais datasets serão utilizados na execução.
+
 ```bash
-python3 src/experiment_runner
+python3 src/experiment_runner.py
 ```
