@@ -20,19 +20,17 @@ LARGURAS_REFINAMENTO = [0.01, 0.05, 0.10, 0.15, 0.25]
 # --- CONFIGURAÇÃO DE FILTRO ---
 # DATA_DIR = "synthetic"
 
-ALEMAO = "SouthGermanCredit_LIMPO.csv"
-
 DATASETS_SINTETICOS = [
-    'multivar_01_circular_sem_overlap.csv',
-    'multivar_02_eliptico_sem_overlap.csv',
-    'multivar_03_circular_baixa_overlap.csv',
-    'multivar_04_eliptico_baixa_overlap.csv',
-    'multivar_05_circular_media_overlap.csv',
-    'multivar_06_eliptico_media_overlap.csv',
-    'multivar_07_circular_alta_overlap.csv',
-    'multivar_08_eliptico_alta_overlap.csv',
-    'multivar_09_circular_correlacao_positiva.csv',
-    'multivar_10_eliptico_tamanhos_diferentes.csv',
+    # 'multivar_01_circular_sem_overlap.csv',
+    # 'multivar_02_eliptico_sem_overlap.csv',
+    # 'multivar_03_circular_baixa_overlap.csv',
+    # 'multivar_04_eliptico_baixa_overlap.csv',
+    # 'multivar_05_circular_media_overlap.csv',
+    # 'multivar_06_eliptico_media_overlap.csv',
+    # 'multivar_07_circular_alta_overlap.csv',
+    # 'multivar_08_eliptico_alta_overlap.csv',
+    # 'multivar_09_circular_correlacao_positiva.csv',
+    # 'multivar_10_eliptico_tamanhos_diferentes.csv',
 
     # 'sklearn_01_circles_v1.csv',
     # 'sklearn_01_circles_v2.csv',
@@ -71,14 +69,18 @@ DATASETS_SINTETICOS = [
     # 'sklearn_06_varied_v5.csv',
 ]
 
-
-# DATASETS_ALVO = DATASETS_SINTETICOS
-
 DATA_DIR = "data"
 DATASETS_ALVO = [
     # 'Iranian Customer Churn_LIMPO.csv',
-    'winequality-red_LIMPO.csv',
-    'winequality-white_LIMPO.csv',
+    # 'winequality-red_LIMPO.csv',
+    # 'winequality-white_LIMPO.csv',
+    'Bankruptcy Prediction_LIMPO.csv',
+    # 'online_shoppers_converted.csv',
+    'Hand Postures_LIMPO.csv',
+    'circles_LIMPO.csv',
+    'Gesture Segmentation_LIMPO.csv',
+    'HCV-Egy-Data_LIMPO.csv',
+    'SouthGermanCredit_LIMPO.csv',
 ]    
 
 # =============================================================================

@@ -28,3 +28,37 @@ Recomenda-se o uso de um ambiente virtual para não conflitar com outras instala
    ```bash
     pip install -r requirements.txt
    ```
+
+## Organização do Repositório
+
+```bash
+├── README.md
+├── data
+│   ├── Bankruptcy Prediction_LIMPO.csv
+│   ├── Gesture Segmentation_LIMPO.csv
+│   ├── HCV-Egy-Data_LIMPO.csv
+│   ├── Hand Postures_LIMPO.csv
+│   ├── Iranian Customer Churn_LIMPO.csv
+│   ├── SouthGermanCredit_LIMPO.csv
+│   ├── circles_LIMPO.csv
+│   ├── online_shoppers_converted.csv
+│   ├── winequality-red_LIMPO.csv
+│   └── winequality-white_LIMPO.csv
+├── requirements.txt
+├── resultados
+│   └── "resultados das execuções dos algoritmos
+│        para cada dataset"
+├── src
+│   ├── algorithms.py
+│   ├── data_generator.py
+│   ├── data_loader.py
+│   ├── distances.py
+│   ├── experiment_runner.py
+│   ├── main.py
+│   ├── resultados.py
+│   ├── runner_south_german.py
+│   ├── teste_validacao.py
+│   └── testekcentro.py
+└── synthetic
+   └── "dasets sintéticos gerados"
+```
