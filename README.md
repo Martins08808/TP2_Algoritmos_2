@@ -1,4 +1,9 @@
 # TP2: Algoritmos Aproximativos - K-Centros
+Repositório do trabalho prático 2 da disciplina de Algoritmos II - 2025.2. 
+
+Alunos:
+Kauan Teixeira Pereira                     2023087770
+Gabriel Miranda Assunção dos Santos        2023111131
 
 Este projeto implementa algoritmos 2-aproximados (Guloso e Refinamento) para o problema dos k-centros, além de comparar métricas de distância (Minkowski e Mahalanobis).
 
