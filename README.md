@@ -56,7 +56,7 @@ Recomenda-se o uso de um ambiente virtual para não conflitar com outras instala
 │   ├── experiment_runner.py
 │   └── resultados.py
 ├── synthetic
-│   └── "dasets sintéticos gerados"
+│   └── "datasets sintéticos gerados"
 ├── Tabela_Resumo_Real.xlsx
 ├── Tabela_Resumo_Sintéticos.xlsx
 └── relatorio.pdf
