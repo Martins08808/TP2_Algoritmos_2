@@ -18,69 +18,73 @@ N_REPETICOES = 15
 LARGURAS_REFINAMENTO = [0.01, 0.05, 0.10, 0.15, 0.25]
 
 # --- CONFIGURAÇÃO DE FILTRO ---
-# DATA_DIR = "synthetic"
-
+DATA_DIR_SINTETICOS = "synthetic"
 DATASETS_SINTETICOS = [
-    # 'multivar_01_circular_sem_overlap.csv',
-    # 'multivar_02_eliptico_sem_overlap.csv',
-    # 'multivar_03_circular_baixa_overlap.csv',
-    # 'multivar_04_eliptico_baixa_overlap.csv',
-    # 'multivar_05_circular_media_overlap.csv',
-    # 'multivar_06_eliptico_media_overlap.csv',
-    # 'multivar_07_circular_alta_overlap.csv',
-    # 'multivar_08_eliptico_alta_overlap.csv',
-    # 'multivar_09_circular_correlacao_positiva.csv',
-    # 'multivar_10_eliptico_tamanhos_diferentes.csv',
+    'multivar_01_circular_sem_overlap.csv',
+    'multivar_02_eliptico_sem_overlap.csv',
+    'multivar_03_circular_baixa_overlap.csv',
+    'multivar_04_eliptico_baixa_overlap.csv',
+    'multivar_05_circular_media_overlap.csv',
+    'multivar_06_eliptico_media_overlap.csv',
+    'multivar_07_circular_alta_overlap.csv',
+    'multivar_08_eliptico_alta_overlap.csv',
+    'multivar_09_circular_correlacao_positiva.csv',
+    'multivar_10_eliptico_tamanhos_diferentes.csv',
 
-    # 'sklearn_01_circles_v1.csv',
-    # 'sklearn_01_circles_v2.csv',
-    # 'sklearn_01_circles_v3.csv',
-    # 'sklearn_01_circles_v4.csv',
-    # 'sklearn_01_circles_v5.csv',
+    'sklearn_01_circles_v1.csv',
+    'sklearn_01_circles_v2.csv',
+    'sklearn_01_circles_v3.csv',
+    'sklearn_01_circles_v4.csv',
+    'sklearn_01_circles_v5.csv',
 
-    # 'sklearn_02_moons_v1.csv',
-    # 'sklearn_02_moons_v2.csv',
-    # 'sklearn_02_moons_v3.csv',
-    # 'sklearn_02_moons_v4.csv',
-    # 'sklearn_02_moons_v5.csv',
+    'sklearn_02_moons_v1.csv',
+    'sklearn_02_moons_v2.csv',
+    'sklearn_02_moons_v3.csv',
+    'sklearn_02_moons_v4.csv',
+    'sklearn_02_moons_v5.csv',
 
-    # 'sklearn_03_blobs_v1.csv',
-    # 'sklearn_03_blobs_v2.csv',
-    # 'sklearn_03_blobs_v3.csv',
-    # 'sklearn_03_blobs_v4.csv',
-    # 'sklearn_03_blobs_v5.csv',
+    'sklearn_03_blobs_v1.csv',
+    'sklearn_03_blobs_v2.csv',
+    'sklearn_03_blobs_v3.csv',
+    'sklearn_03_blobs_v4.csv',
+    'sklearn_03_blobs_v5.csv',
 
-    # 'sklearn_04_no_structure_v1.csv',
-    # 'sklearn_04_no_structure_v2.csv',
-    # 'sklearn_04_no_structure_v3.csv',
-    # 'sklearn_04_no_structure_v4.csv',
-    # 'sklearn_04_no_structure_v5.csv',
+    'sklearn_04_no_structure_v1.csv',
+    'sklearn_04_no_structure_v2.csv',
+    'sklearn_04_no_structure_v3.csv',
+    'sklearn_04_no_structure_v4.csv',
+    'sklearn_04_no_structure_v5.csv',
 
-    # 'sklearn_05_aniso_v1.csv',
-    # 'sklearn_05_aniso_v2.csv',
-    # 'sklearn_05_aniso_v3.csv',
-    # 'sklearn_05_aniso_v4.csv',
-    # 'sklearn_05_aniso_v5.csv',
+    'sklearn_05_aniso_v1.csv',
+    'sklearn_05_aniso_v2.csv',
+    'sklearn_05_aniso_v3.csv',
+    'sklearn_05_aniso_v4.csv',
+    'sklearn_05_aniso_v5.csv',
 
-    # 'sklearn_06_varied_v1.csv',
-    # 'sklearn_06_varied_v2.csv',
-    # 'sklearn_06_varied_v3.csv',
-    # 'sklearn_06_varied_v4.csv',
-    # 'sklearn_06_varied_v5.csv',
+    'sklearn_06_varied_v1.csv',
+    'sklearn_06_varied_v2.csv',
+    'sklearn_06_varied_v3.csv',
+    'sklearn_06_varied_v4.csv',
+    'sklearn_06_varied_v5.csv',
 ]
 
-DATA_DIR = "data"
-DATASETS_ALVO = [
-    # 'Iranian Customer Churn_LIMPO.csv',
-    # 'winequality-red_LIMPO.csv',
-    # 'winequality-white_LIMPO.csv',
+DATA_DIR_REAL = "data"
+DATASETS_REAIS = [
+    'Iranian Customer Churn_LIMPO.csv',
+    'winequality-red_LIMPO.csv',
+    'winequality-white_LIMPO.csv',
     'Bankruptcy Prediction_LIMPO.csv',
-    # 'online_shoppers_converted.csv',
+    'online_shoppers_converted.csv',
     'Hand Postures_LIMPO.csv',
     'circles_LIMPO.csv',
     'Gesture Segmentation_LIMPO.csv',
     'HCV-Egy-Data_LIMPO.csv',
     'SouthGermanCredit_LIMPO.csv',
+]    
+
+DATA_DIR = DATA_DIR_SINTETICOS
+DATASETS_ALVO = [
+    'multivar_01_circular_sem_overlap.csv',
 ]    
 
 # =============================================================================
