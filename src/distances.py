@@ -7,9 +7,7 @@ def distancia_minkowski(ponto_a, ponto_b, p):
     return soma_potencias ** (1.0 / p)
 
 def distancia_mahalanobis(ponto_a, ponto_b, matriz_inv_cov):
-    
-    #Calcula a distância de Mahalanobis usando S^-1 (inversa da matriz de covariância).
-    
+        
     delta = ponto_a - ponto_b
     # Operação: delta.T @ S^-1 @ delta
     dist_quadrada = delta @ matriz_inv_cov @ delta

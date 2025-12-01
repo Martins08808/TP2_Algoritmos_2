@@ -54,11 +54,7 @@ Recomenda-se o uso de um ambiente virtual para não conflitar com outras instala
 │   ├── data_loader.py
 │   ├── distances.py
 │   ├── experiment_runner.py
-│   ├── main.py
-│   ├── resultados.py
-│   ├── runner_south_german.py
-│   ├── teste_validacao.py
-│   └── testekcentro.py
+│   └── resultados.py
 ├── synthetic
 │   └── "dasets sintéticos gerados"
 ├── Tabela_Resumo_Real.xlsx
@@ -93,7 +89,7 @@ Contém todo o código fonte do projeto:
 
 - **Execução e Testes:**
   - `experiment_runner.py`: Arquivo principal para orquestrar a execução completa dos experimentos.
-  - `resultados.py`: Módulo responsável por compilar, formatar e exportar os dados brutos das execuções.
+  - `resultados.py`: Módulo responsável por compilar os dados brutos das execuções em uma tabela única.
 
 ### Raiz
 
