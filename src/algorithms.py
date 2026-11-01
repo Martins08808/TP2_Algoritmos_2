@@ -36,11 +36,7 @@ def cluster_guloso(matriz_dist, k, semente=None):
     
     return centros, raio_max
 
-
-
 # ALGORITMO COM REFINAMENTO DE INTERVALO (Busca Binária)
-
-
 def _verificar_viabilidade(matriz_dist, raio_teste, k_max):
     """
     Verifica se é possível cobrir todos os pontos com 'raio_teste' usando <= k_max centros.
